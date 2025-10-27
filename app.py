@@ -21,14 +21,14 @@ st.markdown("---")
 st.sidebar.header("Navigation")
 page = st.sidebar.radio("Go to", ["Overview", "Visualizations", "Prediction of Demand", "Model Performance"])
 
-# Load data
+# Loading data
 @st.cache_data
 def load_data():
     df = pd.read_csv('data/processed/processed.csv')
     df['Date'] = pd.to_datetime(df['Date'])
     return df
 
-# Load model
+# Loading model
 @st.cache_resource
 def load_model():
     with open('models/demand_model.pkl', 'rb') as f:
@@ -37,7 +37,7 @@ def load_model():
         feature_names = pickle.load(f)
     return model, feature_names
 
-# Load everything
+# Loading everything
 df = load_data()
 model, feature_names = load_model()
 
@@ -60,7 +60,7 @@ if page == "Overview":
     
     st.markdown("---")
     
-    # Show sample data
+    # Showing sample data
     st.subheader("Sample Data")
     st.dataframe(df.head(10))
     
@@ -73,6 +73,7 @@ elif page == "Visualizations":
     st.header("Data Visualizations")
 
     # Sales Distribution
+
     st.subheader("Sales Distribution")
     fig, ax = plt.subplots(figsize=(10, 5))
     ax.hist(df['Sales'], bins=30, edgecolor='black', color='steelblue', alpha=0.7)
@@ -85,6 +86,7 @@ elif page == "Visualizations":
     st.markdown("---")
     
     # Sales Trend Over Time
+
     st.subheader("Sales Trend Over Time")
     daily_sales = df.groupby('Date')['Sales'].sum().reset_index()
     fig, ax = plt.subplots(figsize=(12, 5))
@@ -99,6 +101,7 @@ elif page == "Visualizations":
     st.markdown("---")
     
     # Top Products by Sales
+
     st.subheader("Top Products by Total Sales")
     product_sales = df.groupby('Product')['Sales'].sum().sort_values(ascending=True)
     fig, ax = plt.subplots(figsize=(10, 5))
@@ -111,6 +114,7 @@ elif page == "Visualizations":
     st.markdown("---")
     
     # Demand by Discount Band
+
     st.subheader("Average Demand by Discount Band")
     discount_demand = df.groupby('Discount Band')['Units Sold'].mean().sort_values()
     fig, ax = plt.subplots(figsize=(10, 5))
@@ -128,6 +132,7 @@ elif page == "Prediction of Demand":
     st.write("Enter product details to predict demand (units sold)")
     
     # Creating input form
+
     col1, col2 = st.columns(2)
     
     with col1:
@@ -143,6 +148,7 @@ elif page == "Prediction of Demand":
         month = st.slider("Month", min_value=1, max_value=12, value=6)
     
     # Prediction button
+    
     if st.button("Predict Demand", type="primary"):
 
         # Preparing input data
@@ -245,7 +251,7 @@ elif page == "Model Performance":
     ax.barh(feature_importance['Feature'], feature_importance['Impact'], color=colors, alpha=0.7)
     ax.set_xlabel('Coefficient Value', fontsize=12)
     ax.set_title('Feature Impact on Demand Prediction', fontsize=14, fontweight='bold')
-    ax.axvline(x=0, color='black', linestyle='--', linewidth=0.8)
+    ax.axvline(x=0, color='black', linestyle'--', linewidth=0.8)
     st.pyplot(fig)
     
     st.write("""
